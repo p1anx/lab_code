@@ -105,7 +105,9 @@ int main(void)
   // ADS1263_RegSFOCAL();
   // ADS1263_RegCheck(0x07);
   // ADS1263_Print();
-  // ADS1263_ToPython();
+  /*===================================*/
+  ADS1263_ToPython();           //using python to get data.
+  /*===================================*/
   
 
   /* USER CODE END 2 */
