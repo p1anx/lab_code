@@ -9,10 +9,10 @@ import pandas as pd
 port = '/dev/ttyUSB0'
 baudrate = 115200
 # fs = 2088 # 7200sps
-# fs = 1184 # 1200sps
-fs =  98
-filePath = '/home/xwj/Documents/Research/Metlags_and_nichrome/'
-img = '80cm1Hz_with_metglas.png'
+fs = 1184 # 1200sps
+# fs =  98 #100sps
+filePath = '/home/xwj/Documents/Research/Distance Test1/'
+# img = '80cm1Hz_with_metglas.png'
 
 def cal():
     rxflag = b'\x11'
@@ -123,10 +123,8 @@ def serialPlot():
                     v_buffer = voltage[0:1000] 
                     n_point  = len(v_buffer)
 
-
-                    v = fft.fft(v_buffer)
-                    v = 20*np.log10(abs(v))
-                    # v = abs(v)
+                    v = abs(fft.fft(v_buffer)) / n_point * 2
+                    # v = 20*np.log10(abs(v)) 
                     f = fft.fftfreq(n_point, 1/fs)
                     
                     plt.figure(1)
@@ -139,13 +137,19 @@ def serialPlot():
                     plt.subplot(212)
                     plt.plot(f, v)
                     plt.xlabel('f/Hz')
-                    plt.ylabel('y/dB')
+                    plt.ylabel('y/v')
                     plt.xlim([0, fs/2])
                     
                     plt.tight_layout()
 
-                    plt.savefig(filePath+ img, dpi = 300)
-                    plt.show()
+                    ########################################################
+                    Name = 'd=140cm'+' r'+' vmax='+str(round(max(v),8)) +'v' + ' f=20Hz' + ' n=' + str(n_point) + ' fs=' + str(fs) + 'Hz' 
+                    df = pd.DataFrame(v_buffer)
+                    df.to_csv(filePath+Name+'.csv', index= False)
+                    ########################################################
+                    plt.savefig(filePath+ Name + '.png', dpi = 300)
+                    print(f'\nmax={round(max(v), 8)}v\n')
+                    # plt.show()
                     break
                 
             else:
@@ -155,38 +159,6 @@ def serialPlot():
         ser.close()
         print("serial closed!\n")
 
-def serialRead():
-    rxflag = b'\x11'
-    port = 'COM7'
-    baudrate = 115200
-
-    ser = serial.Serial(port, baudrate)
-
-    try:
-        while True:
-            # print('waiting!!', end = '\r')
-            # print(ser.read(1))
-            if  rxflag == ser.read(1):
-                data = ser.read(4)
-                data_str = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3]
-
-                if data_str > 2**31:
-                    data_str = 2**32 - data_str
-                    data_str = -data_str
-                voltage = data_str * 2.5  / (2**31)
-                print(f'data:{data_str}', end= '\r')
-                # print('\n')
-                print(f'voltage:{voltage} v', end= '\r')
-            else:
-                print('waiting!!', end = '\r')
-                
-
-
-
-
-    except KeyboardInterrupt:
-        ser.close()
-        print("serial closed!\n")
 if __name__ == '__main__':
     # print('data:', 2**3)
     # print(b'0x11')

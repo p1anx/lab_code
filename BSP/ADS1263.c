@@ -3,7 +3,6 @@
 #include <math.h>
 
 void ADS1263_Config(void){
-    ADS1263_Init(ADS1263_DR_400, ADS1263_GAIN_1, ADS1263_MUXP_AIN0 | ADS1263_MUXN_AINCOM);
 
 }
 
@@ -340,7 +339,7 @@ void ADS1263_Print(void){
     uint8_t rxData;
     float v;
 
-    ADS1263_Config();
+    ADS1263_Init(ADS1263_DR_400, ADS1263_GAIN_1, ADS1263_MUXP_AIN0 | ADS1263_MUXN_AINCOM);
     while(1){
         // ADS1263_ReadData();
         rxData = ADS1263_DataRx();
@@ -399,7 +398,7 @@ void ADS1263_DataTx(void){
 
 }
 void ADS1263_ToPython(void){
-    ADS1263_Init(ADS1263_DR_100, ADS1263_GAIN_1, ADS1263_MUXP_AIN0 | ADS1263_MUXN_AINCOM);
+    ADS1263_Init(ADS1263_DR_1200, ADS1263_GAIN_1, ADS1263_MUXP_AIN0 | ADS1263_MUXN_AINCOM);
     // ADS1263_Config();
     while(1){
         // HAL_Delay(10);
