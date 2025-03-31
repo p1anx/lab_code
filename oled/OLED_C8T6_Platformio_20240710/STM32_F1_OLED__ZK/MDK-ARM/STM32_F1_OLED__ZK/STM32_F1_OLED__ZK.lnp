@@ -1,0 +1,28 @@
+--cpu Cortex-M3
+"stm32_f1_oled__zk\startup_stm32f103xb.o"
+"stm32_f1_oled__zk\main.o"
+"stm32_f1_oled__zk\gpio.o"
+"stm32_f1_oled__zk\spi.o"
+"stm32_f1_oled__zk\stm32f1xx_it.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_msp.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_gpio_ex.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_spi.o"
+"stm32_f1_oled__zk\stm32f1xx_hal.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_rcc.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_rcc_ex.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_gpio.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_dma.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_cortex.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_pwr.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_flash.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_flash_ex.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_exti.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_tim.o"
+"stm32_f1_oled__zk\stm32f1xx_hal_tim_ex.o"
+"stm32_f1_oled__zk\system_stm32f1xx.o"
+"stm32_f1_oled__zk\oled.o"
+"stm32_f1_oled__zk\zk.o"
+--strict --scatter "STM32_F1_OLED__ZK\STM32_F1_OLED__ZK.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "STM32_F1_OLED__ZK.map" -o STM32_F1_OLED__ZK\STM32_F1_OLED__ZK.axf
