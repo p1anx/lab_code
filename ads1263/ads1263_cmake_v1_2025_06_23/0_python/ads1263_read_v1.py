@@ -12,17 +12,29 @@ baudrate = 115200
 # fs = 2088 # 7200sps
 fs = 1184 # 1200sps
 # fs =  98 #100sps
-filePath = './data_2025_5_10/'
+filePath = './data_single_with_pomo_20mm_2025_6_23/'
 if not os.path.exists(filePath):
     os.makedirs(filePath)
-fileName = filePath + '90cm'
+fileName = filePath + '50cm_without_pomo'
 # img = '80cm1Hz_with_metglas.png'
 
+def find_Bmax(f, value, f_work, f_range = 5): #fwork is frequency that you want to get, 
+    value_list = []
+    data_zip = zip(f, value)
+    for index, value in data_zip:
+        if(f_work-f_range < index < f_work + f_range):
+            value_list.append(value)
+            # print(f"index = {index}, value = {value}")
+    Bmax = max(value_list)
+    print(f'Bmax = {round(Bmax, 8)}')
+    return  Bmax
+    
 def serialPlot():
+    n_point = 1024 * 2
+    f_work = 20 # Hz
     rxflag = b'\x11'
     # port = 'COM7'
     print(f'fs:{fs}Hz')
-    n_point = 1024
     
     # file_path = filePath
     # cal_data = pd.read_csv(filePath + 'cal.csv')
@@ -53,13 +65,15 @@ def serialPlot():
                 if i == n_point-1:
                     voltage = np.array(voltage)
                     # v_buffer = voltage[0:1000] - caldata
-                    v_buffer = voltage[0:1000] 
+                    v_buffer = voltage[0:n_point-1] 
                     n_point  = len(v_buffer)
 
                     v = abs(fft.fft(v_buffer)) / n_point * 2
                     v = v[:n_point//2]
                     # v = 20*np.log10(abs(v)) 
                     f = fft.fftfreq(n_point, 1/fs)[:n_point//2]
+                    find_Bmax(f, v, f_work)
+                    # print(f'freq = f[:10] = {f[:40]}')
                     
                     plt.figure(1)
                     plt.subplot(211)
@@ -83,7 +97,7 @@ def serialPlot():
                     df.to_csv(fileName+'.csv', index= False)
                     ########################################################
                     plt.savefig(fileName + '.png', dpi = 300)
-                    print(f'\nmax={round(max(v), 8)}v\n')
+                    # print(f'\nmax={round(max(v), 8)}v\n')
                     # plt.show()
                     break
                 
